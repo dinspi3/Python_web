@@ -1,5 +1,4 @@
-
-#http://www.digitalmarketingchef.org/web-scraping-in-python-using-beautifulsoup/
+#Import modules & libraries
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,25 +11,29 @@ def web_scraper(url):
     r=requests.get(url)
     soup=BeautifulSoup(r.content,"lxml")
     title=[item.text for item in soup.find_all("title")]
-    h1=[item.text for item in soup.find_all("h1")]
-    h2=[item.text for item in soup.find_all("h2")]
-    h3 = [item.text for item in soup.find_all("h3")]
-    p = [item.text for item in soup.find_all("p")]
-    a = [item.text for item in soup.find_all("a")]
-    div = [item.text for item in soup.find_all("div")]
-    scraped_content=[url,title,h1,h2,h3,p,a,div]
+    text = soup.find("div", class_= "PricesTxt").text
+    print(text)
+  #  h2=[item.text for item in soup.find_all("h2")]
+    scraped_content=[url,title,text]
     return scraped_content
+
+
+
 
 # Scraping a list of URLs and storing them in a DataFrame
 
-urls=["https://www.zap.co.il/models.aspx?sog=c-tabletpc",
-      "https://www.zap.co.il/models.aspx?sog=c-tabletpc&db53548=4255448"]
+urls=["https://www.zap.co.il/model.aspx?modelid=1047644"]
+
+
 
 all_results=[]
 for url in urls:
     X=web_scraper(url)
     all_results.append(X)
-df = DataFrame(all_results,columns=["URL","Title","H1","H2","H3","p","a","div"])
+
+df = DataFrame(all_results,columns=["URL","Title","text"])
+
+
 
 # export to excel
 
